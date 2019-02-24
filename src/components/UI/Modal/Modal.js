@@ -1,13 +1,18 @@
 import React from 'react'
 import CssModal from './Modal.module.css'
+import BackDrop from '../Backdrop/BackDrop'
+import Aux from '../../../hoc/Auxiliary'
 
 const Modal=(props)=>{
     return(
-        <div className={CssModal.Modal}
-             style={{transform:props.show? 'translateY(0)':'translateY(-100vh)',
-                    opacity:props.show? '1':'0'}}>
-            {props.children}
-        </div>
+        <Aux>
+            <BackDrop show={props.show} clicked={props.modalClose}/>
+            <div className={CssModal.Modal}
+                 style={{transform:props.show? 'translateY(0)':'translateY(-100vh)',
+                     opacity:props.show? '1':'0'}}>
+                {props.children}
+            </div>
+        </Aux>
     )
 };
 
