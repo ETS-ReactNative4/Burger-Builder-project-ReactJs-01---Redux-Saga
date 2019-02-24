@@ -13,9 +13,15 @@ const controls=[
 const BuildControls=(props)=>{
     return(
         <div className={CssBuildControls.BuildControls}>
+            <p><b>Current Price: {props.price.toFixed(2)}</b></p>
             {controls.map((elem)=>{
-                return <BuildControl key={elem.label} label={elem.label} added={()=>props.ingredientAdder(elem.type)}/>;
+                return <BuildControl key={elem.label}
+                                     label={elem.label}
+                                     added={()=>props.ingredientAdder(elem.type)}
+                                     remover={()=>{props.ingredientRemover(elem.type)}}
+                                     disabled={props.disabled[elem.type]}/>;
             })}
+            <button className={CssBuildControls.OrderButton} disabled={!props.purchasable}>Order Now</button>
         </div>
     )
 };
