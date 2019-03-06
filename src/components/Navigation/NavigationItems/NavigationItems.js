@@ -1,11 +1,11 @@
 import React from 'react'
 import CssNavItems from './NavigationItems.module.css'
-import NavItem from './NavigationItem/NavigationItem'
+import NaviItem from './NavigationItem/NavigationItem'
 const NavigationItems=(props)=>{
     return(
         <ul className={CssNavItems.NavigationItems}>
-            <NavItem link="/" active>Burger Builder</NavItem>
-            <NavItem link="/">Check out</NavItem>
+            <NaviItem link="/"  exact>Burger Builder</NaviItem>
+            <NaviItem link="/orders">Orders</NaviItem>
         </ul>
     )
 };
