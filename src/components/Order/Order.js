@@ -4,7 +4,7 @@ import CssOrder from './Order.module.css'
 const Order =(props)=>{
 
     const ingredients=[];
-    for(let ingredientsName in props.ingredients){ //alternative to "Burger.js" ingredient object to array transforming super complex method
+    for(let ingredientsName in props.ingredients){ //alternative to "Burger.js" ingredient object to array transforming super complex method though it had a different purpose
         ingredients.push( {name:ingredientsName, amount:props.ingredients[ingredientsName]} );
     }
 

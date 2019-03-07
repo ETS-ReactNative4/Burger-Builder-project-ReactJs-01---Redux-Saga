@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Route} from 'react-router-dom'
+import {Route, } from 'react-router-dom'
 import CheckoutSummery from '../../components/Order/CheckoutSummery/CheckoutSummery'
 import ContactData from './ContactData/ContactData'
 
@@ -42,8 +42,9 @@ class Checkout extends Component{
                                  checkoutCancle={this.checkoutCancleHandler}
                                  checkoutContinue={this.checkoutContinueHandler} />
                 <Route path={this.props.match.path+'/contact-data'} render={(props)=><ContactData ingredients={this.state.ingredients}
-                                                                                             price={this.state.price}
-                                                                                                  {...props}/>}/>
+                                                                                                  price={this.state.price}
+                                                                                                  {...props} />}
+                                                                                                  />
             </div>
         );
     }

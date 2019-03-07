@@ -3,18 +3,65 @@ import CssContactData from './ContactData.module.css'
 import axios from '../../../axios-orders'
 import Button from '../../../components/UI/Button/Button'
 import Spinner from '../../../components/UI/Spinner/Spinner'
+import CustomInput from '../../../components/UI/Input/Input'
 
 
 class ContactData extends Component{
     state={
-        name:'',
-        email:'',
-        address:{
-            street:'',
-            postalCode:''
-        },
-        loading:false,
+         orderForm:{
+             name:{
+                elementType:'input',
+                elementConfig:{
+                    type:'text',
+                    placeholder:'Your Name'
+                },
+                value:''
+             },
+             street:{
+                 elementType:'input',
+                 elementConfig:{
+                     type:'text',
+                     placeholder:'Street'
+                 },
+                 value:''
+             },
+             zipcode:{
+                 elementType:'input',
+                 elementConfig:{
+                     type:'text',
+                     placeholder:'ZIP Code'
+                 },
+                 value:''
+             },
+             country:{
+                 elementType:'input',
+                 elementConfig:{
+                     type:'text',
+                     placeholder:'Country'
+                 },
+                 value:''
+             },
+             email:{
+                 elementType:'input',
+                 elementConfig:{
+                     type:'email',
+                     placeholder:'Email'
+                 },
+                 value:''
+             },
+             delivaryMethod:{
+                 elementType:'select',
+                 elementConfig:{
+                    options:[
+                        {value:'fastest', displayValue:'Fastest'},
+                        {value:'cheapest', displayValue:'Cheapest'}
+                        ]
+                 },
+                 value:''
+             }
+         },
 
+         loading:false,
     };
     onOrderHandler=(event)=>{
         event.preventDefault();//to prevent the page reload upon clicking submit button inside the form
@@ -24,16 +71,6 @@ class ContactData extends Component{
        const order={
            ingredients:this.props.ingredients,
            price:this.props.price,
-           delivaryMethod:'fastest',
-           customer:{
-               name:'Aman',
-               address:{
-                   street:'Hirschberger Str. 64',
-                   zipcode:53119,
-                   country:'Germany'
-               },
-               email:'test.com'
-           }
        };
 
       axios.post('/BurgerOrders.json', order).
@@ -50,10 +87,10 @@ class ContactData extends Component{
     render(){
         let form=(
             <form>
-                <input className={CssContactData.Input} type="text" name="name" placeholder="Your Name"/>
-                <input className={CssContactData.Input} type="email" name="email" placeholder="Your Mail"/>
-                <input className={CssContactData.Input} type="text" name="Street" placeholder="Street"/>
-                <input className={CssContactData.Input} type="text" name="postal" placeholder="Postal Code"/>
+                <CustomInput elementType="" elementConfig="" value="" />
+                <CustomInput inputtype="input" type="email" name="email" placeholder="Your Mail"/>
+                <CustomInput inputtype="input" type="text" name="Street" placeholder="Street"/>
+                <CustomInput inputtype="input" type="text" name="postal" placeholder="Postal Code"/>
                 <Button btnType="Success" clicked={this.onOrderHandler}>Order</Button>
             </form>
             );
