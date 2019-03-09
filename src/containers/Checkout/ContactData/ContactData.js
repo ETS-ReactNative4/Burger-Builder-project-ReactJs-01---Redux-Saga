@@ -15,7 +15,12 @@ class ContactData extends Component{
                     type:'text',
                     placeholder:'Your Name'
                 },
-                value:''
+                value:'',
+                validation:{
+                    required:true
+                },
+                valid:false,
+                touched:false
              },
              street:{
                  elementType:'input',
@@ -23,7 +28,12 @@ class ContactData extends Component{
                      type:'text',
                      placeholder:'Street'
                  },
-                 value:''
+                 value:'',
+                 validation:{
+                     required:true
+                 },
+                 valid:false,
+                 touched:false
              },
              zipcode:{
                  elementType:'input',
@@ -31,7 +41,14 @@ class ContactData extends Component{
                      type:'text',
                      placeholder:'ZIP Code'
                  },
-                 value:''
+                 value:'',
+                 validation:{
+                     required:true,
+                     maxLen:5,
+                     minLen:5
+                 },
+                 valid:false,
+                 touched:false
              },
              country:{
                  elementType:'input',
@@ -39,7 +56,12 @@ class ContactData extends Component{
                      type:'text',
                      placeholder:'Country'
                  },
-                 value:''
+                 value:'',
+                 validation:{
+                     required:true
+                 },
+                 valid:false,
+                 touched:false
              },
              email:{
                  elementType:'input',
@@ -47,7 +69,12 @@ class ContactData extends Component{
                      type:'email',
                      placeholder:'Email'
                  },
-                 value:''
+                 value:'',
+                 validation:{
+                     required:true
+                 },
+                 valid:false,
+                 touched:false
              },
              delivaryMethod:{
                  elementType:'select',
@@ -57,20 +84,72 @@ class ContactData extends Component{
                         {value:'cheapest', displayValue:'Cheapest'}
                         ]
                  },
-                 value:''
+                 value:'',
+                 validation:{},
+                 valid:true
              }
          },
-
+         formIsValid:false,
          loading:false,
     };
+
+    checkValidity=(value, rules)=>{
+        let isValid=true;
+
+        if(!rules){ // so thah the validation checking operation does not fail. for in case we don;t have the "validation" property in any orderForm item. such as "delivaryMethod"
+            isValid=true;
+        }
+
+        if(rules.required){
+            isValid= value.trim() !=='' && isValid; //isValid is only true when the "value" is not empty
+        }
+
+        if(rules.minLen){
+            isValid= value.length >= rules.minLen && isValid;
+        }
+
+        if(rules.maxLen){
+            isValid= value.length <= rules.maxLen && isValid;
+        }
+
+        return isValid;
+    };
+
+    inputChangeHandler=(event, ElementId)=>{
+        console.log(event.target.value);
+        const updatedOrderForm={...this.state.orderForm}; // only the first level object pointers are copied such as "name", "street", "email etc"
+        const updatedOrderFormElement={...updatedOrderForm[ElementId]}; //deep cloning now the inner object of each object are also copied such as all the properties of "name" object
+
+        updatedOrderFormElement.value=event.target.value;
+        updatedOrderFormElement.valid=this.checkValidity(updatedOrderFormElement.value, updatedOrderFormElement.validation);
+        updatedOrderFormElement.touched=true;
+
+        //console.log(updatedOrderFormElement);
+        updatedOrderForm[ElementId]=updatedOrderFormElement;
+
+        let formIsValid=true;
+        for(let inputId in  updatedOrderForm){
+            formIsValid= updatedOrderForm[inputId].valid && formIsValid;
+        }
+
+        this.setState({orderForm:updatedOrderForm, formIsValid:formIsValid});
+    };
+
+
     onOrderHandler=(event)=>{
         event.preventDefault();//to prevent the page reload upon clicking submit button inside the form
 
         this.setState({loading:true});
 
+        const formData={};
+        for(let formElementId in this.state.orderForm){
+            formData[formElementId]=this.state.orderForm[formElementId].value;
+        }
+
        const order={
            ingredients:this.props.ingredients,
            price:this.props.price,
+           orderData:formData
        };
 
       axios.post('/BurgerOrders.json', order).
@@ -85,13 +164,24 @@ class ContactData extends Component{
 
     }
     render(){
+        const formElementArray=[];
+        for(let key in this.state.orderForm){
+            formElementArray.push({id:key, config:this.state.orderForm[key]});
+        }
         let form=(
-            <form>
-                <CustomInput elementType="" elementConfig="" value="" />
-                <CustomInput inputtype="input" type="email" name="email" placeholder="Your Mail"/>
-                <CustomInput inputtype="input" type="text" name="Street" placeholder="Street"/>
-                <CustomInput inputtype="input" type="text" name="postal" placeholder="Postal Code"/>
-                <Button btnType="Success" clicked={this.onOrderHandler}>Order</Button>
+            <form onSubmit={this.onOrderHandler}>
+                {formElementArray.map( formElem=>{
+                    return <CustomInput key={formElem.id}
+                                        elementType={formElem.config.elementType}
+                                        elementConfig={formElem.config.elementConfig}
+                                        value={formElem.config.value}
+                                        invalid={!formElem.config.valid}
+                                        shouldValidate={formElem.config.validation}
+                                        touched={formElem.config.touched}
+                                        changed={(event)=>this.inputChangeHandler(event, formElem.id)}/>;
+                })}
+
+                <Button btnType="Success" disabled={!this.state.formIsValid}>Order</Button>
             </form>
             );
         if(this.state.loading){
