@@ -2,9 +2,10 @@ import React, {Component} from 'react'
 import {Route, } from 'react-router-dom'
 import CheckoutSummery from '../../components/Order/CheckoutSummery/CheckoutSummery'
 import ContactData from './ContactData/ContactData'
+import {connect} from 'react-redux'
 
 class Checkout extends Component{
-    state={
+   /* state={
         ingredients:null,
         price:null,
     }
@@ -27,7 +28,7 @@ class Checkout extends Component{
         }
         console.log(ingredients);
         this.setState({ingredients:ingredients});
-    }
+    } */
 
     checkoutCancleHandler=()=>{
         this.props.history.goBack();
@@ -38,17 +39,23 @@ class Checkout extends Component{
     render(){
         return(
             <div>
-                <CheckoutSummery ingredients={this.state.ingredients}
+                <CheckoutSummery ingredients={this.props.ingredients}
                                  checkoutCancle={this.checkoutCancleHandler}
                                  checkoutContinue={this.checkoutContinueHandler} />
-                <Route path={this.props.match.path+'/contact-data'} render={(props)=><ContactData ingredients={this.state.ingredients}
-                                                                                                  price={this.state.price}
-                                                                                                  {...props} />}
-                                                                                                  />
+                <Route path={this.props.match.path+'/contact-data'} component={ContactData}/>
+                {/*<Route path={this.props.match.path+'/contact-data'} render={(props)=><ContactData ingredients={this.props.ingredients}
+                                                                                                              price={this.props.totalPrice}
+                                                                                                              {...props} />} /> */}
             </div>
         );
     }
 
 }
 
-export default Checkout;
+const mapStateToProps=state=>{
+    return{
+        ingredients:state.ingredients
+    }
+}
+
+export default connect(mapStateToProps)(Checkout);
