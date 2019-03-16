@@ -5,6 +5,8 @@ import Button from '../../../components/UI/Button/Button'
 import Spinner from '../../../components/UI/Spinner/Spinner'
 import CustomInput from '../../../components/UI/Input/Input'
 import {connect} from 'react-redux'
+import errorHandler from '../../../hoc/ErrorHandler/ErrorHandler'
+import * as orderActions from '../../../store/actions/exportAllActions'
 
 
 class ContactData extends Component{
@@ -91,7 +93,6 @@ class ContactData extends Component{
              }
          },
          formIsValid:false,
-         loading:false,
     };
 
     checkValidity=(value, rules)=>{
@@ -140,11 +141,9 @@ class ContactData extends Component{
     onOrderHandler=(event)=>{
         event.preventDefault();//to prevent the page reload upon clicking submit button inside the form
 
-        this.setState({loading:true});
-
         const formData={};
-        for(let formElementId in this.state.orderForm){
-            formData[formElementId]=this.state.orderForm[formElementId].value;
+        for(let formElementKey in this.state.orderForm){
+            formData[formElementKey]=this.state.orderForm[formElementKey].value;
         }
 
        const order={
@@ -153,16 +152,7 @@ class ContactData extends Component{
            orderData:formData
        };
 
-      axios.post('/BurgerOrders.json', order).
-       then((res)=>{
-           console.log(res);
-           this.setState({loading:false});
-           this.props.history.push('/');
-       }).catch(error=>{
-           console.log(error);
-           this.setState({loading:false});
-       });
-
+       this.props.onBurgerOrder(order);
     }
     render(){
         const formElementArray=[];
@@ -185,7 +175,7 @@ class ContactData extends Component{
                 <Button btnType="Success" disabled={!this.state.formIsValid}>Order</Button>
             </form>
             );
-        if(this.state.loading){
+        if(this.props.loading){
             form=<Spinner/>;
         }
         return(
@@ -200,8 +190,15 @@ class ContactData extends Component{
 const mapStateToProps=state=>{
     return {
         ingredients:state.ingredients,
-        totalPrice:state.totalPrice
+        totalPrice:state.totalPrice,
+        loading:state.loading
+    }
+};
+
+const mapDispatchToProps=(dispatch)=>{
+    return {
+        onBurgerOrder:(orderData)=>{dispatch(orderActions.purchaseBurger(orderData))}
     }
 }
 
-export default connect(mapStateToProps)(ContactData);
+export default connect(mapStateToProps, mapDispatchToProps)(errorHandler(ContactData, axios));
