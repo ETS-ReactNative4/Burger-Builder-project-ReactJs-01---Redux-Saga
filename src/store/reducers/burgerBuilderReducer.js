@@ -15,6 +15,10 @@ const INGREDIENT_PRICES={
     bacon:0.7
 };
 
+const setError=(state)=>{
+    return updateObject(state, {error:true}); //just to test the method of utility.js
+};
+
 const burgerBuilderReducer=(state=initialState, action)=>{
     switch (action.type) {
         case actionType.ADD_INGREDIENT:
@@ -41,10 +45,7 @@ const burgerBuilderReducer=(state=initialState, action)=>{
                 totalPrice:2
             };
         case actionType.FETCH_INGREDIENTS_FAIL:
-            return{
-                ...state,
-                error:true
-            };
+            return setError(state);
         default:
             return state;
     }
