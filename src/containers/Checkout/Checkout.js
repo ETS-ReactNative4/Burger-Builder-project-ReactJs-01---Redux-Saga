@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
-import {Route, } from 'react-router-dom'
+import {Route, Redirect} from 'react-router-dom'
 import CheckoutSummery from '../../components/Order/CheckoutSummery/CheckoutSummery'
 import ContactData from './ContactData/ContactData'
 import {connect} from 'react-redux'
+import * as orderActions from '../../store/actions/exportAllActions'
 
 class Checkout extends Component{
    /* state={
@@ -37,25 +38,34 @@ class Checkout extends Component{
         this.props.history.replace('/checkout/contact-data');
     }
     render(){
-        return(
-            <div>
-                <CheckoutSummery ingredients={this.props.ingredients}
-                                 checkoutCancle={this.checkoutCancleHandler}
-                                 checkoutContinue={this.checkoutContinueHandler} />
-                <Route path={this.props.match.path+'/contact-data'} component={ContactData}/>
-                {/*<Route path={this.props.match.path+'/contact-data'} render={(props)=><ContactData ingredients={this.props.ingredients}
-                                                                                                              price={this.props.totalPrice}
-                                                                                                              {...props} />} /> */}
-            </div>
-        );
+        let summery=<Redirect to="/"/>;
+
+        if(this.props.ingredients){
+            const purchaseRedirect=this.props.purchased? <Redirect to="/"/> : null ;
+            summery=(
+                <div>
+                    {purchaseRedirect}
+                    <CheckoutSummery ingredients={this.props.ingredients}
+                                       checkoutCancle={this.checkoutCancleHandler}
+                                       checkoutContinue={this.checkoutContinueHandler} />
+                     <Route path={this.props.match.path+'/contact-data'} component={ContactData}/>
+                     {/*<Route path={this.props.match.path+'/contact-data'} render={(props)=><ContactData ingredients={this.props.ingredients}
+                                                                                                 price={this.props.totalPrice}
+                                                                                                 {...props} />} /> */}
+                </div>);
+        }
+
+        return summery;
     }
 
 }
 
 const mapStateToProps=state=>{
     return{
-        ingredients:state.ingredients
+        ingredients:state.burgerBuilder.ingredients,
+        purchased:state.order.purchased
     }
-}
+};
+
 
 export default connect(mapStateToProps)(Checkout);

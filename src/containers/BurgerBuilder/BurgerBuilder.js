@@ -8,7 +8,7 @@ import Spinner from '../../components/UI/Spinner/Spinner'
 import axios from '../../axios-orders'
 import ErrorHandler from '../../hoc/ErrorHandler/ErrorHandler'
 import {connect} from 'react-redux'
-import * as burgerBuilderActions from '../../store/actions/exportAllActions'
+import * as Actions from '../../store/actions/exportAllActions'
 
 
 /*const INGREDIENT_PRICES={
@@ -33,7 +33,7 @@ class BurgerBuilder extends Component{
         }).catch(error=>{
                 this.setState({error:true});
         }); */
-       this.props.onInitIngredients()
+       this.props.onInitIngredients();
     }
 
     /*addIngredientHandler=(type)=>{
@@ -81,7 +81,7 @@ class BurgerBuilder extends Component{
              search:'?'+queryString,
          });
          console.log('queryParam &: '+queryParam.join('&')); */
-
+        this.props.onInitPurchase();
         this.props.history.push({pathname:'/checkout'});// after adding Redux to this app we didnt need to send the ingredients as query paramitter so we do this
     };
 
@@ -146,17 +146,18 @@ class BurgerBuilder extends Component{
 
 const mapStateToProps=state=>{
     return {
-        ingredients: state.ingredients,
-        totalPrice: state.totalPrice,
-        error: state.error
+        ingredients: state.burgerBuilder.ingredients,
+        totalPrice: state.burgerBuilder.totalPrice,
+        error: state.burgerBuilder.error
     }
 };
 
 const mapDispatchToProps=dispatch=>{
     return {
-        onIngredientAdd:(ingredientName)=>dispatch(burgerBuilderActions.addIngredients(ingredientName)),
-        onIngredientRemove:(ingredientName)=>dispatch(burgerBuilderActions.removeIngredients(ingredientName)),
-        onInitIngredients:()=>{dispatch(burgerBuilderActions.asyn_initIngredients())}
+        onIngredientAdd:(ingredientName)=>dispatch(Actions.addIngredients(ingredientName)),
+        onIngredientRemove:(ingredientName)=>dispatch(Actions.removeIngredients(ingredientName)),
+        onInitIngredients:()=>{dispatch(Actions.asyn_initIngredients())},
+        onInitPurchase:()=>dispatch(Actions.purchaseInit())
     }
 };
 

@@ -5,13 +5,19 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import {BrowserRouter} from "react-router-dom";
 import {Provider} from 'react-redux'
-import {createStore, compose, applyMiddleware} from 'redux'
+import {createStore, compose, applyMiddleware, combineReducers} from 'redux'
 import thunk from 'redux-thunk'
 import burgerBuilderReducer from './store/reducers/burgerBuilderReducer'
+import orderReducer from './store/reducers/orderReducers'
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const rootReducer=combineReducers({
+    burgerBuilder:burgerBuilderReducer,
+    order:orderReducer
+});
 
-const store=createStore(burgerBuilderReducer,  composeEnhancers(applyMiddleware(thunk)));
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; //to add the redux dev tool
+
+const store=createStore(rootReducer,  composeEnhancers(applyMiddleware(thunk)));
 
 const app=(
     <Provider store={store}>

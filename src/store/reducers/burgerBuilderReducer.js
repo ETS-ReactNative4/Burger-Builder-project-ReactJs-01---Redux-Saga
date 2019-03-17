@@ -1,4 +1,5 @@
 import * as actionType from '../actions/actionTypes'
+import {updateObject} from '../utility'
 
 const initialState={
     ingredients:null,
@@ -26,19 +27,18 @@ const burgerBuilderReducer=(state=initialState, action)=>{
                 totalPrice:state.totalPrice + INGREDIENT_PRICES[action.ingredientName],
             };
         case actionType.REMOVE_INGREDIENT:
+            const updatedIngredient={ [action.ingredientName]:state.ingredients[action.ingredientName]-1}
+            const updatedIng=updateObject(state, updatedIngredient);
             return{
-                ...state,
-                ingredients:{
-                    ...state.ingredients,
-                    [action.ingredientName]:state.ingredients[action.ingredientName]-1
-                },
+                ingredients:updatedIng, //just use the method from utility.js to do the same thing ADD_INGREDIENT
                 totalPrice:state.totalPrice - INGREDIENT_PRICES[action.ingredientName],
             };
         case actionType.SET_INGREDIENTS:
             return{
                 ...state,
                 ingredients:action.ingredients,
-                error:false
+                error:false,
+                totalPrice:2
             };
         case actionType.FETCH_INGREDIENTS_FAIL:
             return{
