@@ -6,6 +6,7 @@ const NavigationItems=(props)=>{
         <ul className={CssNavItems.NavigationItems}>
             <NaviItem link="/"  exact>Burger Builder</NaviItem>
             <NaviItem link="/orders">Orders</NaviItem>
+            <NaviItem link="/auth">Authentication</NaviItem>
         </ul>
     )
 };
