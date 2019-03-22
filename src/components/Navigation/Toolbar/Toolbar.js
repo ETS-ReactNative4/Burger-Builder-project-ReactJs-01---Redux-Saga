@@ -14,7 +14,7 @@ const Toolbar=(props)=>{
                 <DrawerToggler clicked={props.toggler}/>
 
                 <nav className={CssToolbar.DesktopOnly}>
-                    <NavigationItems/>
+                    <NavigationItems Authenticated={props.Authenticated}/>
                 </nav>
             </header>
     )

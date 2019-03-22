@@ -94,7 +94,13 @@ class BurgerBuilder extends Component{
         return sum>0;
     }
     purchsingHandler=()=>{
-        this.setState({ purchasing:true});
+        if(this.props.isAuthenticated){
+            this.setState({ purchasing:true});
+        }else{
+            this.props.onSetAuthRedirectPath('/checkout');
+            this.props.history.push('/auth');
+        }
+
     };
     purchaseCancelHandler=()=>{
         this.setState({ purchasing:false});
@@ -119,7 +125,8 @@ class BurgerBuilder extends Component{
                                                    disabled={disabledInfo}
                                                    price={this.props.totalPrice}
                                                    purchasable={this.updatePurchaseState(this.props.ingredients)}
-                                                   purchasing={this.purchsingHandler}/>
+                                                   purchasing={this.purchsingHandler}
+                                                   isAuthenticated={this.props.isAuthenticated}/>
                                     </Aux>;
 
             orderSummery= <OrderSummery ingredients={this.props.ingredients}
@@ -148,7 +155,8 @@ const mapStateToProps=state=>{
     return {
         ingredients: state.burgerBuilder.ingredients,
         totalPrice: state.burgerBuilder.totalPrice,
-        error: state.burgerBuilder.error
+        error: state.burgerBuilder.error,
+        isAuthenticated:state.auth.token !== null
     }
 };
 
@@ -157,7 +165,8 @@ const mapDispatchToProps=dispatch=>{
         onIngredientAdd:(ingredientName)=>dispatch(Actions.addIngredients(ingredientName)),
         onIngredientRemove:(ingredientName)=>dispatch(Actions.removeIngredients(ingredientName)),
         onInitIngredients:()=>{dispatch(Actions.asyn_initIngredients())},
-        onInitPurchase:()=>dispatch(Actions.purchaseInit())
+        onInitPurchase:()=>dispatch(Actions.purchaseInit()),
+        onSetAuthRedirectPath:(path)=>dispatch(Actions.setAuthRedirectPath(path))
     }
 };
 

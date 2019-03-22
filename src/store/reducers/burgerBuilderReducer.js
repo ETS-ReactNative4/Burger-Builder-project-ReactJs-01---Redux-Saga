@@ -6,6 +6,7 @@ const initialState={
     totalPrice:2,
     loading:false,
     error:false,
+    building:false
 };
 
 const INGREDIENT_PRICES={
@@ -29,6 +30,7 @@ const burgerBuilderReducer=(state=initialState, action)=>{
                     [action.ingredientName]:state.ingredients[action.ingredientName]+1 // shortcut of finding that particular ingredient using if or for loop then updating it
                 },
                 totalPrice:state.totalPrice + INGREDIENT_PRICES[action.ingredientName],
+                building:true
             };
         case actionType.REMOVE_INGREDIENT:
             const updatedIngredient={ [action.ingredientName]:state.ingredients[action.ingredientName]-1}
@@ -36,13 +38,15 @@ const burgerBuilderReducer=(state=initialState, action)=>{
             return{
                 ingredients:updatedIng, //just use the method from utility.js to do the same thing ADD_INGREDIENT
                 totalPrice:state.totalPrice - INGREDIENT_PRICES[action.ingredientName],
+                building:true
             };
         case actionType.SET_INGREDIENTS:
             return{
                 ...state,
                 ingredients:action.ingredients,
                 error:false,
-                totalPrice:2
+                totalPrice:2,
+                building:false
             };
         case actionType.FETCH_INGREDIENTS_FAIL:
             return setError(state);

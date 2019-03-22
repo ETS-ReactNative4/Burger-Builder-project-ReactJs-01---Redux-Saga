@@ -2,4 +2,4 @@ export {addIngredients, removeIngredients, asyn_initIngredients} from './burgerB
 
 export {purchaseBurger, purchaseBurgerStart, purchaseInit, fetchOrders} from './orderActions';
 
-export {auth} from './authActions'
+export {auth, logOut, setAuthRedirectPath} from './authActions'

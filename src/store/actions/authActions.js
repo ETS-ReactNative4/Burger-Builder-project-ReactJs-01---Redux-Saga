@@ -20,7 +20,8 @@ export const auth=(email, password, isSignup)=>{
       axios.post(url, authData)
           .then(response=>{
               console.log(response);
-              return dispatch(authSuccess(response.data));
+              dispatch(authSuccess(response.data));
+              dispatch(checkAuthTimeout(response.data.expiresIn));
           }).catch(error=>{
               console.log(error.response);
               return dispatch(authFail(error.response.data.error));
@@ -40,3 +41,18 @@ export const authFail=(error)=>{
     return {type:actionTypes.AUTH_FAIL, error:error};
 };
 
+
+
+export const checkAuthTimeout=(expirationTime)=>{
+    return (dispatch)=>{
+        setTimeout(()=>{ dispatch(logOut()) }, expirationTime*1000);
+    }
+};
+export const logOut=()=>{
+    return {type:actionTypes.AUTH_LOGOUT}
+};
+
+
+export const setAuthRedirectPath=(path)=>{
+   return {type:actionTypes.SET_AUTH_REDIRECT_PATH, path:path}
+};
