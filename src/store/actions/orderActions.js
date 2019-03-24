@@ -38,11 +38,11 @@ export const purchaseInit=()=>{
 
 
 
-export const fetchOrders=(token)=>{
+export const fetchOrders=(token, userId)=>{
     return (dispatch)=>{
         dispatch(fetchOrdersStart());
-
-        axios.get('/BurgerOrders.json?auth='+token).then( res=>{
+        const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"';
+        axios.get('/BurgerOrders.json'+queryParams).then( res=>{
             const fetchOrders=[]
             for(let key in res.data){
 
