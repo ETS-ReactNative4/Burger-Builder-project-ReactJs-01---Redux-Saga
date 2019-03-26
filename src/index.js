@@ -17,7 +17,7 @@ const rootReducer=combineReducers({
     auth:authReducer
 });
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; //to add the redux dev tool
+const composeEnhancers =  process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose; //to add the redux dev tool (only in the development mode)
 
 const store=createStore(rootReducer,  composeEnhancers(applyMiddleware(thunk)));
 

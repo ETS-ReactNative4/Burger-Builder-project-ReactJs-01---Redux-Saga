@@ -4,9 +4,6 @@ import Button from '../../UI/Button/Button'
 
 class OrderSummery extends Component{
 
-   componentWillUpdate(nextProps, nextState, nextContext) {
-       console.log('[OrderSummery.js] will update')
-   }
 
     render(){
         const ingredientsSummmery=Object.keys(this.props.ingredients).map(igkey=>{

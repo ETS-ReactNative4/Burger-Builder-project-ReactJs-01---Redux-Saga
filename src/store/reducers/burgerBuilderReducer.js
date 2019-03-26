@@ -20,6 +20,8 @@ const setError=(state)=>{
     return updateObject(state, {error:true}); //just to test the method of utility.js
 };
 
+
+
 const burgerBuilderReducer=(state=initialState, action)=>{
     switch (action.type) {
         case actionType.ADD_INGREDIENT:
@@ -33,10 +35,14 @@ const burgerBuilderReducer=(state=initialState, action)=>{
                 building:true
             };
         case actionType.REMOVE_INGREDIENT:
-            const updatedIngredient={ [action.ingredientName]:state.ingredients[action.ingredientName]-1}
-            const updatedIng=updateObject(state, updatedIngredient);
+            let updatedIngredient={ [action.ingredientName]:state.ingredients[action.ingredientName]-1};
+            let updatedIng=updateObject(state.ingredients, updatedIngredient);
             return{
                 ingredients:updatedIng, //just use the method from utility.js to do the same thing ADD_INGREDIENT
+                //ingredients:{
+                //  ...state.ingredients,
+                //[action.ingredientName]:state.ingredients[action.ingredientName]-1
+                //},
                 totalPrice:state.totalPrice - INGREDIENT_PRICES[action.ingredientName],
                 building:true
             };

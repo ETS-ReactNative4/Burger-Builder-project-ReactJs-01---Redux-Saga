@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
-import {Route, Redirect} from 'react-router-dom'
+import {Route, Redirect, withRouter} from 'react-router-dom'
 import CheckoutSummery from '../../components/Order/CheckoutSummery/CheckoutSummery'
 import ContactData from './ContactData/ContactData'
 import {connect} from 'react-redux'
-import * as orderActions from '../../store/actions/exportAllActions'
+
 
 class Checkout extends Component{
    /* state={
@@ -68,4 +68,4 @@ const mapStateToProps=state=>{
 };
 
 
-export default connect(mapStateToProps)(Checkout);
+export default withRouter(connect(mapStateToProps)(Checkout));
