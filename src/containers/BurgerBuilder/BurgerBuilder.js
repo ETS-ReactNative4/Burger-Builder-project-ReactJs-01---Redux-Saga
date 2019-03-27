@@ -17,7 +17,9 @@ import * as Actions from '../../store/actions/exportAllActions'
     meat:1.3,
     bacon:0.7
 };*/
-class BurgerBuilder extends Component{
+
+//we export it inorder to use "BurgerBuilder" into the "BurgerBuilder.test.js" file
+export class BurgerBuilder extends Component{
     state={
         //ingredients:null,
         //totalPrice:2,
