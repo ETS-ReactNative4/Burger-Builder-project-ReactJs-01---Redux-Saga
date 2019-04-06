@@ -10,6 +10,8 @@ import thunk from 'redux-thunk'
 import burgerBuilderReducer from './store/reducers/burgerBuilderReducer'
 import orderReducer from './store/reducers/orderReducers'
 import authReducer from './store/reducers/authReducer'
+import CreateSagaMiddleWare from 'redux-saga'
+import {watchAuth} from './store/Sagas/rootSaga'
 
 const rootReducer=combineReducers({
     burgerBuilder:burgerBuilderReducer,
@@ -17,9 +19,13 @@ const rootReducer=combineReducers({
     auth:authReducer
 });
 
+const sagaMiddleWare=CreateSagaMiddleWare();
+
 const composeEnhancers =  process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose; //to add the redux dev tool (only in the development mode)
 
-const store=createStore(rootReducer,  composeEnhancers(applyMiddleware(thunk)));
+const store=createStore(rootReducer,  composeEnhancers(applyMiddleware(thunk, sagaMiddleWare)));
+
+sagaMiddleWare.run(watchAuth);
 
 const app=(
     <Provider store={store}>
