@@ -1,4 +1,4 @@
-import {put, delay} from 'redux-saga/effects'
+import {put, delay, call} from 'redux-saga/effects'
 import * as actionTypes from "../actions/actionTypes";
 import * as authActions from "../actions/authActions";
 import * as actions from './rootSaga'
@@ -10,8 +10,10 @@ import axios from "axios";
 
 export function* logoutSaga(action){  //"function*" is a next gen js function type called "Generator" which can run incrementally means we can pause it in between an execution and allow any asyn task to finish.
     yield localStorage.removeItem('token'); //"yield" is optional for this ide. It makes the execution continue only when it's step is done. useful for asyn operations
-    yield localStorage.removeItem('localId');
-    yield localStorage.removeItem('expirationDate');
+    //yield localStorage.removeItem('localId');
+    yield call([localStorage, "removeItem"], "localId");
+    //yield localStorage.removeItem('expirationDate');
+    yield call([localStorage, "removeItem"], "expirationDate");
 
     yield put({type:actionTypes.AUTH_LOGOUT})//"put()" dispatches new action
 };
